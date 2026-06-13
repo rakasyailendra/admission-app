@@ -8,7 +8,7 @@
 ---
 
 ## 1. 🎯 Executive Summary
-Proyek ini adalah prototipe Sistem Penerimaan Mahasiswa Baru (PMB 2025) yang dirancang untuk mendemonstrasikan efisiensi pengembangan perangkat lunak modern. Dibangun 100% menggunakan *autonomous AI coding agent* (GitHub Copilot), proyek ini tidak sekadar menghasilkan *working software*, tetapi juga membuktikan bagaimana *Prompt-Driven Development* dapat dikendalikan oleh *Engineering Mindset* untuk menghasilkan *codebase* yang bersih, aman, dan *scalable*—sesuai dengan standar industri EdTech.
+Proyek ini adalah prototipe Sistem Penerimaan Mahasiswa Baru (PMB 2025) yang dirancang untuk mendemonstrasikan efisiensi pengembangan perangkat lunak modern. Dibangun 100% menggunakan *autonomous AI coding agent*, proyek ini tidak sekadar menghasilkan *working software*, tetapi juga membuktikan bagaimana *Prompt-Driven Development* dapat dikendalikan oleh *Engineering Mindset* untuk menghasilkan *codebase* yang bersih, aman, dan *scalable*—sesuai dengan standar industri EdTech.
 
 ---
 
@@ -34,10 +34,10 @@ Penggunaan AI di sini tidak menggunakan prompt generik. AI diarahkan layaknya *J
 ---
 
 ## 4. 🛠️ Human-in-the-Loop: Mengatasi "AI Hallucination"
-AI Agent mampu mempercepat penulisan *boilerplate*, namun tetap membutuhkan pengawasan teknis (*Engineering Overrides*) untuk menjamin performa:
+AI Agent mampu mempercepat penulisan *boilerplate*, namun tetap membutuhkan pengawasan teknis (*Engineering Overrides*) untuk menjamin performa perangkat lunak:
 
 *   **Pencegahan N+1 Query Problem:** Pada saat AI men-generate endpoint `/api/statistik`, instruksi awal AI sering kali menghasilkan *query* yang berat di dalam *loop*. Intervensi dilakukan dengan memaksa AI menggunakan *Eager Loading* atau *Aggregate Functions* bawaan Laravel Eloquent (`count`, `groupBy`) agar komputasi dilakukan di level database, bukan di level aplikasi.
-*   **Keamanan Token Auth:** Mengkoreksi AI yang mencoba menyimpan Sanctum Token di `localStorage` (rentan terhadap XSS). Intervensi dilakukan dengan memindahkan penyimpanan ke `sessionStorage` dengan alur *clear-on-logout* yang lebih aman untuk *dashboard* admin.
+*   **Keamanan Token Auth:** Mengkoreksi AI yang mencoba menyimpan Sanctum Token di `localStorage` (rentan terhadap eksploitasi XSS). Intervensi dilakukan dengan memindahkan penyimpanan ke `sessionStorage` dengan alur *clear-on-logout* yang lebih aman untuk *dashboard* admin.
 
 ---
 
@@ -60,6 +60,6 @@ Semua endpoint komunikasi mengembalikan respons berformat JSON dan dilindungi ol
 ## 6. 🚀 Scalability & Alignment dengan Visi SEVIMA (EdTech)
 Meskipun berstatus prototipe *mini challenge*, *codebase* ini telah mengantisipasi kebutuhan skala kampus di dunia nyata:
 
-1.  **Mobile-Ready Integration:** Arsitektur *API-First* memastikan bahwa jika SEVIMA ingin menambahkan aplikasi *Mobile* (misal: menggunakan Flutter atau React Native) bagi calon mahasiswa, *backend logic* tidak perlu dirombak sama sekali.
-2.  **High-Performance Ready:** Pemisahan *Client-Server* memungkinkan *frontend* di-*deploy* di CDN (seperti Vercel atau Cloudflare Pages), sehingga beban *server backend* (Laravel) murni hanya untuk komputasi data dan transaksi database.
+1.  **Mobile-Ready Integration:** Arsitektur *API-First* memastikan bahwa jika kampus ingin berekspansi dengan menambahkan aplikasi *Mobile* mandiri (misalnya menggunakan *framework* seperti Flutter) bagi calon mahasiswa, *backend logic* tidak perlu dirombak sama sekali.
+2.  **High-Performance Ready:** Pemisahan *Client-Server* memungkinkan *frontend* di-*deploy* di CDN (seperti Vercel atau Cloudflare Pages), sehingga beban *server backend* (Laravel) murni hanya untuk komputasi data dan transaksi database yang masif.
 3.  **Data Portability:** Fitur *Export* CSV menggunakan *encoding* UTF-8 BOM yang telah disesuaikan agar 100% kompatibel dengan MS Excel, mempermudah tim tata usaha kampus (*Backoffice*) dalam mengolah data pelamar secara konvensional.
