@@ -12,16 +12,42 @@ Proyek ini adalah prototipe Sistem Penerimaan Mahasiswa Baru (PMB 2025) yang dir
 
 ---
 
-## 2. 🏗️ Arsitektur Sistem & Alur Data
-Mengadopsi pola *Decoupled Client-Server Architecture* (API-First Approach).
-
-*   **Frontend (React 18 + Vite):** Bertindak sebagai *Single Page Application* (SPA) mandiri. Difokuskan pada *Client-Side Rendering* (CSR), manajemen *state* UI, dan UX yang responsif menggunakan Tailwind CSS. 
-*   **Backend (Laravel 12):** Bertindak murni sebagai RESTful API Server. Menangani *Business Logic*, validasi *server-side*, autentikasi *stateless* via Sanctum, dan operasi I/O ke Database.
-*   **Database (SQLite ➔ PostgreSQL):** Menggunakan SQLite untuk kecepatan iterasi selama fase *development/prototyping*, namun *schema migration* telah disiapkan secara penuh untuk transisi instan ke PostgreSQL di level *production*.
+## 2. 👥 Target Pengguna (User Persona)
+Sistem ini dirancang secara spesifik untuk memfasilitasi dua aktor utama dengan kebutuhan yang berbeda:
+1. **Calon Mahasiswa (Public):** Membutuhkan antarmuka yang cepat, responsif di perangkat *mobile*, dan alur pendaftaran yang jelas.
+2. **Admin PMB / Tata Usaha (Internal):** Membutuhkan keamanan data (via *Sanctum Auth*), visualisasi statistik pendaftar yang *real-time*, dan kemudahan rekapitulasi data (via fitur *Export CSV*).
 
 ---
 
-## 3. 🧠 Strategi "Advanced Prompt-Driven Development"
+## 3. 🏗️ Arsitektur Sistem & Alur Data
+Mengadopsi pola *Decoupled Client-Server Architecture* (API-First Approach).
+
+* **Frontend (React 18 + Vite):** Bertindak sebagai *Single Page Application* (SPA) mandiri. Difokuskan pada *Client-Side Rendering* (CSR), manajemen *state* UI, dan UX yang responsif menggunakan Tailwind CSS. 
+* **Backend (Laravel 12):** Bertindak murni sebagai RESTful API Server. Menangani *Business Logic*, validasi *server-side*, autentikasi *stateless* via Sanctum, dan operasi I/O ke Database.
+* **Database (SQLite ➔ PostgreSQL):** Menggunakan SQLite untuk kecepatan iterasi selama fase *development/prototyping*, namun *schema migration* telah disiapkan secara penuh untuk transisi instan ke PostgreSQL di level *production*.
+
+---
+
+## 4. ⏱️ Timeline & Estimasi Pengerjaan
+Penggunaan AI Agent memangkas waktu *development* secara drastis. Berikut adalah rincian *roadmap* penyelesaian proyek yang dieksekusi secara iteratif:
+
+| Fase Pengembangan | Tanggal Eksekusi | Waktu (AI-Assisted) | Fokus Pengerjaan |
+| :--- | :--- | :---: | :--- |
+| **Fase 1: Frontend Core** | 11 Juni 2026 | ~2 Jam | Setup React & Vite, komponen *Tailwind UI*, form pendaftaran, dan validasi sisi klien. |
+| **Fase 2: Backend API** | 12 Juni 2026 | ~2 Jam | Inisialisasi Laravel 12, skema *Database* (SQLite), pembuatan model, controller, dan CRUD *Endpoints*. |
+| **Fase 3: Integration & Security** | 13 Juni 2026 | ~1.5 Jam | Implementasi *Sanctum Auth*, perbaikan performa API (N+1 Query), integrasi *Fetch API*, dan *Export* CSV. |
+
+---
+
+## 5. 🧪 Skenario Pengujian (Testing Strategy)
+Untuk memastikan sistem berjalan tanpa cacat sebelum dirilis, dilakukan tiga lapis pengujian:
+1. **Unit Testing (Prompt-Level):** Memastikan fungsi spesifik (seperti generator nomor pendaftaran PMB-2025-XXXX) berjalan sesuai parameter saat di-generate AI.
+2. **API Testing:** Simulasi *HTTP Request* (GET, POST, PATCH) menggunakan **Postman / Thunder Client** ke sisi *Backend* secara terisolasi sebelum dihubungkan ke *Frontend*.
+3. **End-to-End (E2E) Testing:** Pengujian aliran data nyata di *browser*, mulai dari pengisian form oleh calon mahasiswa hingga data tersebut divalidasi dan muncul di *dashboard* admin.
+
+---
+
+## 6. 🧠 Strategi "Advanced Prompt-Driven Development"
 Penggunaan AI di sini tidak menggunakan prompt generik. AI diarahkan layaknya *Junior Developer* yang dibimbing oleh *Tech Lead*, menggunakan teknik **Context-Feeding**:
 
 1.  **Context Injection:** Sebelum menulis kode, AI diberikan konteks menyeluruh melalui file `prd.md` (Product Requirements) dan `skill.md` (Technical Conventions).
@@ -33,15 +59,15 @@ Penggunaan AI di sini tidak menggunakan prompt generik. AI diarahkan layaknya *J
 
 ---
 
-## 4. 🛠️ Human-in-the-Loop: Mengatasi "AI Hallucination"
+## 7. 🛠️ Human-in-the-Loop: Mengatasi "AI Hallucination"
 AI Agent mampu mempercepat penulisan *boilerplate*, namun tetap membutuhkan pengawasan teknis (*Engineering Overrides*) untuk menjamin performa perangkat lunak:
 
-*   **Pencegahan N+1 Query Problem:** Pada saat AI men-generate endpoint `/api/statistik`, instruksi awal AI sering kali menghasilkan *query* yang berat di dalam *loop*. Intervensi dilakukan dengan memaksa AI menggunakan *Eager Loading* atau *Aggregate Functions* bawaan Laravel Eloquent (`count`, `groupBy`) agar komputasi dilakukan di level database, bukan di level aplikasi.
-*   **Keamanan Token Auth:** Mengkoreksi AI yang mencoba menyimpan Sanctum Token di `localStorage` (rentan terhadap eksploitasi XSS). Intervensi dilakukan dengan memindahkan penyimpanan ke `sessionStorage` dengan alur *clear-on-logout* yang lebih aman untuk *dashboard* admin.
+* **Pencegahan N+1 Query Problem:** Pada saat AI men-generate endpoint `/api/statistik`, instruksi awal AI sering kali menghasilkan *query* yang berat di dalam *loop*. Intervensi dilakukan dengan memaksa AI menggunakan *Eager Loading* atau *Aggregate Functions* bawaan Laravel Eloquent (`count`, `groupBy`) agar komputasi dilakukan di level database, bukan di level aplikasi.
+* **Keamanan Token Auth:** Mengkoreksi AI yang mencoba menyimpan Sanctum Token di `localStorage` (rentan terhadap eksploitasi XSS). Intervensi dilakukan dengan memindahkan penyimpanan ke `sessionStorage` dengan alur *clear-on-logout* yang lebih aman untuk *dashboard* admin.
 
 ---
 
-## 5. 🔐 Blueprint API & Spesifikasi Endpoint
+## 8. 🔐 Blueprint API & Spesifikasi Endpoint
 Semua endpoint komunikasi mengembalikan respons berformat JSON dan dilindungi oleh aturan CORS (`config/cors.php`) yang ketat (hanya mengizinkan origin `http://localhost:5173`).
 
 | Method | Endpoint | Auth | Fungsi Utama |
@@ -57,7 +83,7 @@ Semua endpoint komunikasi mengembalikan respons berformat JSON dan dilindungi ol
 
 ---
 
-## 6. 🚀 Scalability & Alignment dengan Visi SEVIMA (EdTech)
+## 9. 🚀 Scalability & Alignment dengan Visi SEVIMA (EdTech)
 Meskipun berstatus prototipe *mini challenge*, *codebase* ini telah mengantisipasi kebutuhan skala kampus di dunia nyata:
 
 1.  **Mobile-Ready Integration:** Arsitektur *API-First* memastikan bahwa jika kampus ingin berekspansi dengan menambahkan aplikasi *Mobile* mandiri (misalnya menggunakan *framework* seperti Flutter) bagi calon mahasiswa, *backend logic* tidak perlu dirombak sama sekali.
